@@ -1,0 +1,65 @@
+<html>
+
+<head>
+
+<!{% load static %}>
+
+<!link rel="stylesheet" type="text/css" href="{% static 'manageLists/style.css' %}" />
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+
+<div class="w3-col s12 m10 l6">
+    <form class="w3-container w3-text-blue" action="{% url 'manageLists:submit' checklist.id %}" method="post">
+    <div class="w3-card-4">
+    <header class="w3-container w3-blue">
+        <h1>
+            {{ checklist.name }}
+            <button type="submit" name="editButton" 
+            class="w3-button w3-blue w3-border w3-border-blue w3-round-large w3-xlarge">
+                <i class="fa fa-edit"></i>
+            </button>
+            <button type="submit" name="deleteButton" 
+            class="w3-button w3-blue w3-border w3-border-blue w3-round-large w3-xlarge">
+                <i class="fa fa-trash"></i>
+            </button>
+        </h1>
+    </header>
+    {% csrf_token %}
+    <div class="w3-container"><p>
+        {% for item in checklist.checklistitem_set.all %}
+            <label>
+                <input type="checkbox" name="{{ item.id }}" value="selected" class="w3-check"
+                {% if item.done %} checked="checked"{% endif %}/>
+                {{ item.name }}
+            </label><br/>
+        {% endfor %}
+    </p></div>
+    <div class="w3-container"><p>
+        <input type="submit" class="w3-button w3-white w3-border w3-border-blue w3-round-large" 
+        value="Übernehmen" />
+    </p></div>
+    <footer class="w3-container w3-blue">
+        <h5>{% if editMode %}Edit Mode{% endif %}</h5>
+    </footer>
+    </div>
+    </form>
+
+{% if editMode %}
+<form class="w3-container" action="{% url 'manageLists:add' checklist.id %}" method="post">
+    {% csrf_token %}
+    <div class="w3-container"><p>
+        <input class="w3-input w3-border w3-border-blue w3-round-large" type="text" name="new_item_name" value="" autofocus>
+        <input class="w3-button w3-round-large w3-white w3-border w3-border-blue" type="submit" value="+" />
+    </p></div>
+</form>
+{% endif %}
+
+</div>
+
+</div></body>
+
+
+</html>
