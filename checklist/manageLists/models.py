@@ -14,6 +14,17 @@ class Checklist(models.Model):
     def no_of_items_not_done(self):
         items = ChecklistItem.objects.filter(checklist=self.id,done=False)
         return len(items)
+    def get_all_items(self):
+        return ChecklistItem.objects.filter(checklist=self.id)
+    def copy_items_to_list(self,list_id):
+        source_items = self.get_all_items()
+        destination = Checklist.objects.get(id=list_id)
+        for this_item in source_items:
+            item_name = this_item.name
+            new_item = ChecklistItem(checklist=destination, name=item_name, done=False)
+            new_item.save()
+    #def remove_dublettes(self):
+        # todo: implement
     def __str__(self):
         return self.name
     

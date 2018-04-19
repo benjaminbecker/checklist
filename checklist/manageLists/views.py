@@ -78,9 +78,25 @@ def add_item(request, list_id):
     # add new item
     # todo: check for errors
     thisList = Checklist.objects.get(id=list_id)
-    item_name = request.POST['new_item_name']
-    new_item = ChecklistItem(checklist=thisList, name=item_name, done=False)
-    new_item.save()
+    items = request.POST['new_item_name']
+    items = items.split('&')
+    items = [this_item.strip() for this_item in items]
+    for item_name in items:
+        if len(item_name):
+            # add another list if item_name starts with '/'
+            if item_name[0]=='/':
+                try:
+                    source_list = Checklist.objects.get(name=item_name[1:])
+                # if list does not exist add new item with /
+                except Checklist.DoesNotExist:
+                    new_item = ChecklistItem(checklist=thisList, name=item_name, done=False)
+                    new_item.save()
+                else:
+                    source_list.copy_items_to_list(list_id)
+            # else add item
+            else:
+                new_item = ChecklistItem(checklist=thisList, name=item_name, done=False)
+                new_item.save()
     # redirect to updated list
     return HttpResponseRedirect(reverse('manageLists:lists', args=(list_id,)))
     

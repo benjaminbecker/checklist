@@ -5,7 +5,7 @@
 <head>
     <!-- {% load static %} -->
     
-    <!-- Against FOUC -->
+    <!-- against FOUC -->
     <style>
         html {
             display: none;
@@ -80,7 +80,7 @@
         <form class="w3-container" action="{% url 'manageLists:add' checklist.id %}" method="post">
             {% csrf_token %}
             <div class="w3-container"><p>
-                <input class="w3-input w3-border w3-border-blue w3-round-large" type="text" name="new_item_name" value="" placeholder="A&B oder /Liste" autofocus>
+                <input class="w3-input w3-border w3-border-blue w3-round-large" type="text" name="new_item_name" value="" placeholder="z.B. Brot&Butter oder /Linsensuppe" autofocus>
                 <input class="w3-button w3-round-large w3-white w3-border w3-border-blue" type="submit" value="+" />
             </p></div>
         </form>
